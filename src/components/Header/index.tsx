@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-import { Container } from './styles';
+import { Container, NavLink } from './styles';
 
 import Logo from '../../assets/logo.svg';
 
@@ -10,22 +10,30 @@ interface HeaderProps {
   size?: 'small' | 'large';
 }
 
-const Header: React.FC<HeaderProps> = ({ size = 'large' }: HeaderProps) => (
-  <Container size={size}>
-    <header>
-      <img src={Logo} alt="GoFinances" />
-      <nav>
-        <>
-          <Link className="link" to="/">
-            Listagem
-          </Link>
-          <Link className="link" to="/import">
-            Importa
-          </Link>
-        </>
-      </nav>
-    </header>
-  </Container>
-);
+const Header: React.FC<HeaderProps> = ({ size = 'large' }: HeaderProps) => {
+  const location = useLocation();
+  const [pathName, setPathName] = useState('');
 
+  useEffect(() => {
+    setPathName(`${location.pathname}`);
+  }, [location]);
+
+  return (
+    <Container size={size}>
+      <header>
+        <img src={Logo} alt="GoFinances" />
+        <nav>
+          <>
+            <NavLink location={pathName} to="/">
+              Listagem
+            </NavLink>
+            <NavLink location={pathName} to="/import">
+              Importar
+            </NavLink>
+          </>
+        </nav>
+      </header>
+    </Container>
+  );
+};
 export default Header;
